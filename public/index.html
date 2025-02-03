@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Mailer</title>
+    <link
+      rel="shortcut icon"
+      href="./assest/mailVibe-logo.png"
+      type="image/x-icon"
+    />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- SweetAlert2 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <!-- Add this in the head section after other CSS links -->
+    <style>
+      :root {
+        --gradient-start: #d9afd9;
+        --gradient-start-1: #da22ff;
+        --gradient-end-1: #9733ee;
+        --gradient-end: #97d9e1;
+        --primary-dark: #2a2a2a;
+        --text-color: #333333;
+        --white: #ffffff;
+        --error: #ff4444;
+        --success: #00c851;
+        --border: #e0e0e0;
+        --input-bg: #f8f9fa;
+      }
+
+      body {
+        background: var(--input-bg);
+        min-height: 100vh;
+      }
+
+      .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        background: var(--white);
+        margin-bottom: 40px;
+      }
+
+      .card-header {
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start-1),
+          var(--gradient-end-1)
+        );
+        border-radius: 15px 15px 0 0 !important;
+        padding: 1.5rem;
+        border: none;
+      }
+
+      .card-header h3 {
+        color: var(--white);
+        font-weight: 600;
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .card-body {
+        padding: 2rem;
+      }
+
+      .form-label {
+        font-weight: 500;
+        color: var(--primary-dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .form-control {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+        background: var(--input-bg);
+        color: var(--text-color);
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: var(--gradient-start-1);
+        box-shadow: 0 0 0 4px rgba(218, 34, 255, 0.1);
+      }
+
+      .form-text {
+        color: var(--text-color);
+        font-size: 0.875rem;
+      }
+
+      #sendButton {
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start-1),
+          var(--gradient-end-1)
+        );
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 200px;
+        color: var(--white);
+      }
+
+      #sendButton:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(218, 34, 255, 0.3);
+      }
+
+      #sendButton:disabled {
+        opacity: 0.7;
+        transform: none;
+      }
+
+      .mb-3 {
+        margin-bottom: 1.5rem !important;
+      }
+
+      /* File input styling */
+      .form-control[type="file"] {
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+
+      .form-control[type="file"]::-webkit-file-upload-button {
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start),
+          var(--gradient-end)
+        );
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        color: var(--primary-dark);
+        margin-right: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control[type="file"]::-webkit-file-upload-button:hover {
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start-1),
+          var(--gradient-end-1)
+        );
+        color: var(--white);
+      }
+
+      /* Textarea specific styling */
+      #content {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      /* Custom styling for validation states */
+      .form-control.is-invalid {
+        border-color: var(--error);
+        background-image: none;
+      }
+
+      .form-control.is-valid {
+        border-color: var(--success);
+        background-image: none;
+      }
+
+      .header-logo {
+        height: 40px; /* Adjust this value based on your needs */
+        width: auto;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header">
+              <div class="text-center">
+                <img
+                  src="/assest/mailVibe-logo-white.png"
+                  alt="MailVibe Logo"
+                  class="header-logo"
+                />
+              </div>
+            </div>
+            <div class="card-body">
+              <form id="emailForm">
+                <!-- Email Input -->
+                <div class="mb-3">
+                  <label for="emails" class="form-label"
+                    >Recipients (comma-separated emails)</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="emails"
+                    required
+                  />
+                  <div class="form-text">
+                    Enter emails separated by commas or...
+                  </div>
+                </div>
+
+                <!-- CSV Upload -->
+                <div class="mb-3">
+                  <label for="csvFile" class="form-label">Upload CSV</label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="csvFile"
+                    accept=".csv"
+                  />
+                </div>
+
+                <!-- Subject Line -->
+                <div class="mb-3">
+                  <label for="subject" class="form-label">Subject</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="subject"
+                    required
+                  />
+                </div>
+
+                <!-- Email Content -->
+                <div class="mb-3">
+                  <label for="content" class="form-label">Email Content</label>
+                  <textarea
+                    class="form-control"
+                    id="content"
+                    rows="6"
+                    required
+                  ></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary" id="sendButton">
+                    Send Email
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts in correct order -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Your custom script -->
+    <script src="/script.js"></script>
+  </body>
+</html>
